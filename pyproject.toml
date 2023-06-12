@@ -1,8 +1,9 @@
 [tool.poetry]
 name = "pandas-money"
 version = "0.1.0"
-description = "A Pandas/Pyarrow mashup for handling currency with Decimal128 performance"
+description = "A Pandas ArrayExtension for handling currency with int64 performance"
 authors = ["Rod Morison <rmorison@users.noreply.github.com>"]
+repository = "https://github.com/rmorison/pandas-money"
 license = "MIT"
 readme = "README.md"
 packages = [{include = "pandas_money"}]

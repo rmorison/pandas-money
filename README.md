@@ -25,7 +25,26 @@ print(s + s)
 print(s * Decimal("1.5"))
 print(s / 2)
 ```
-
+outputs
+```
+0    $1.11
+1    $2.22
+2    $3.33
+dtype: money64
+0    $2.22
+1    $4.44
+2    $6.66
+dtype: money64
+0    $1.66
+1    $3.33
+2    $5.00
+dtype: money64
+0    $0.56
+1    $1.11
+2    $1.66
+dtype: money64
+$1.11 <class 'moneyed.classes.Money'>
+```
 
 ## Setup
 - Clone repo
