@@ -61,44 +61,44 @@ def int_scalar():
 def slice_series():
     return pd.Series(
         {label: i for i, label in enumerate(string.ascii_lowercase[:10])},
-        dtype="money64",
+        dtype="Money64",
     )
 
 
 def test_money_dict(money_dict):
-    m = pd.Series(money_dict, dtype="money64")
+    m = pd.Series(money_dict, dtype="Money64")
     assert isinstance(m.dtype, pm.MoneyDtype)
     assert m["a"] == money_dict["a"]
     assert m["b"] == money_dict["b"]
 
 
 def test_money_list(money_list):
-    m = pd.Series(money_list, dtype="money64")
+    m = pd.Series(money_list, dtype="Money64")
     assert isinstance(m.dtype, pm.MoneyDtype)
     assert m.iloc[0] == money_list[0]
     assert m.iloc[1] == money_list[1]
 
 
 def test_money_scalar(money_scalar):
-    m = pd.Series(money_scalar, dtype="money64")
+    m = pd.Series(money_scalar, dtype="Money64")
     assert isinstance(m.dtype, pm.MoneyDtype)
     assert m.iloc[0] == money_scalar
 
 
 def test_decimal_scalar(decimal_scalar):
-    m = pd.Series(decimal_scalar, dtype="money64")
+    m = pd.Series(decimal_scalar, dtype="Money64")
     assert isinstance(m.dtype, pm.MoneyDtype)
     assert m.iloc[0] == Money(decimal_scalar, USD)
 
 
 def test_str_scalar(str_scalar):
-    m = pd.Series(str_scalar, dtype="money64")
+    m = pd.Series(str_scalar, dtype="Money64")
     assert isinstance(m.dtype, pm.MoneyDtype)
     assert m.iloc[0] == Money(str_scalar, USD)
 
 
 def test_int_scalar(int_scalar):
-    m = pd.Series(int_scalar, dtype="money64")
+    m = pd.Series(int_scalar, dtype="Money64")
     assert isinstance(m.dtype, pm.MoneyDtype)
     assert m.iloc[0] == Money(int_scalar, USD)
 
@@ -106,13 +106,13 @@ def test_int_scalar(int_scalar):
 def test_rounding():
     down = Decimal("1.444999")
     up = Decimal("1.445000")
-    m = pd.Series([down, up], dtype="money64")
+    m = pd.Series([down, up], dtype="Money64")
     assert m.iloc[0] == Money(down.quantize(Decimal(".01")), USD)
     assert m.iloc[1] == Money(up.quantize(Decimal(".01")), USD)
 
 
 def test_add_money(money_list, money_scalar):
-    m1 = pd.Series(money_list, dtype="money64")
+    m1 = pd.Series(money_list, dtype="Money64")
     m2 = money_scalar
     m = m1 + m2
     assert isinstance(m.dtype, pm.MoneyDtype)
@@ -121,8 +121,8 @@ def test_add_money(money_list, money_scalar):
 
 
 def test_add_money_array(money_list):
-    m1 = pd.Series(money_list, dtype="money64")
-    m2 = pd.Series(money_list, dtype="money64")
+    m1 = pd.Series(money_list, dtype="Money64")
+    m2 = pd.Series(money_list, dtype="Money64")
     m = m1 + m2
     assert isinstance(m.dtype, pm.MoneyDtype)
     assert m.iloc[0] == money_list[0] + money_list[0]
@@ -130,7 +130,7 @@ def test_add_money_array(money_list):
 
 
 def test_sub_money(money_list, money_scalar):
-    m1 = pd.Series(money_list, dtype="money64")
+    m1 = pd.Series(money_list, dtype="Money64")
     m2 = money_scalar
     m = m1 - m2
     assert isinstance(m.dtype, pm.MoneyDtype)
@@ -139,8 +139,8 @@ def test_sub_money(money_list, money_scalar):
 
 
 def test_sub_money_array(money_list):
-    m1 = pd.Series(money_list, dtype="money64")
-    m2 = pd.Series(money_list, dtype="money64")
+    m1 = pd.Series(money_list, dtype="Money64")
+    m2 = pd.Series(money_list, dtype="Money64")
     m = m1 - m2
     assert isinstance(m.dtype, pm.MoneyDtype)
     assert m.iloc[0] == money_list[0] - money_list[0]
@@ -148,19 +148,19 @@ def test_sub_money_array(money_list):
 
 
 def test_mul_money_array_money_array(money_list):
-    m1 = pd.Series(money_list, dtype="money64")
+    m1 = pd.Series(money_list, dtype="Money64")
     with pytest.raises(TypeError):
         m1 * m1
 
 
 def test_mul_money_array_money(money_list, money_scalar):
-    m1 = pd.Series(money_list, dtype="money64")
+    m1 = pd.Series(money_list, dtype="Money64")
     with pytest.raises(TypeError):
         m1 * money_scalar
 
 
 def test_mul_money_array_decimal_array(money_list, decimal_list):
-    m1 = pd.Series(money_list, dtype="money64")
+    m1 = pd.Series(money_list, dtype="Money64")
     m2 = pd.Series(decimal_list)
     m = m1 * m2
     assert isinstance(m.dtype, pm.MoneyDtype)
@@ -169,7 +169,7 @@ def test_mul_money_array_decimal_array(money_list, decimal_list):
 
 
 def test_mul_money_array_decimal(money_list, decimal_scalar):
-    m1 = pd.Series(money_list, dtype="money64")
+    m1 = pd.Series(money_list, dtype="Money64")
     m = m1 * decimal_scalar
     assert isinstance(m.dtype, pm.MoneyDtype)
     assert m.iloc[0] == (money_list[0] * decimal_scalar).round(pm.money_decimals)
@@ -177,7 +177,7 @@ def test_mul_money_array_decimal(money_list, decimal_scalar):
 
 
 def test_mul_money_array_float_array(money_list, float_list):
-    m1 = pd.Series(money_list, dtype="money64")
+    m1 = pd.Series(money_list, dtype="Money64")
     m2 = pd.Series(float_list)
     m = m1 * m2
     assert isinstance(m.dtype, pm.MoneyDtype)
@@ -192,7 +192,7 @@ def test_mul_money_array_float_array(money_list, float_list):
 
 
 def test_mul_money_array_float(money_list, float_scalar):
-    m1 = pd.Series(money_list, dtype="money64")
+    m1 = pd.Series(money_list, dtype="Money64")
     m = m1 * float_scalar
     assert isinstance(m.dtype, pm.MoneyDtype)
     # DeprecationWarning: Multiplying Money instances with floats is deprecated
@@ -202,10 +202,10 @@ def test_mul_money_array_float(money_list, float_scalar):
 
 
 def test_truediv_money_array_money_array(money_list):
-    m1 = pd.Series(money_list, dtype="money64")
-    m2 = pd.Series(reversed(money_list), dtype="money64")
+    m1 = pd.Series(money_list, dtype="Money64")
+    m2 = pd.Series(reversed(money_list), dtype="Money64")
     m = m1 / m2
-    assert np.issubdtype(m.dtype, np.floating)  # type: ignore
+    assert isinstance(m.dtype, pd.Float64Dtype)
     assert round(m.iloc[0], ratio_precision) == round(
         float(money_list[0].amount) / float(money_list[1].amount),
         ratio_precision,
@@ -217,9 +217,9 @@ def test_truediv_money_array_money_array(money_list):
 
 
 def test_truediv_money_array_money(money_list, money_scalar):
-    m1 = pd.Series(money_list, dtype="money64")
+    m1 = pd.Series(money_list, dtype="Money64")
     m = m1 / money_scalar
-    assert np.issubdtype(m.dtype, np.floating)
+    assert isinstance(m.dtype, pd.Float64Dtype)
     assert round(m.iloc[0], ratio_precision) == round(
         float(money_list[0].amount) / float(money_scalar.amount),
         ratio_precision,
@@ -231,7 +231,7 @@ def test_truediv_money_array_money(money_list, money_scalar):
 
 
 def test_truediv_money_array_decimal_array(money_list, decimal_list):
-    m1 = pd.Series(money_list, dtype="money64")
+    m1 = pd.Series(money_list, dtype="Money64")
     m2 = pd.Series(reversed(decimal_list))
     m = m1 / m2
     assert isinstance(m.dtype, pm.MoneyDtype)
@@ -240,7 +240,7 @@ def test_truediv_money_array_decimal_array(money_list, decimal_list):
 
 
 def test_truediv_money_array_decimal(money_list, decimal_scalar):
-    m1 = pd.Series(money_list, dtype="money64")
+    m1 = pd.Series(money_list, dtype="Money64")
     m = m1 / decimal_scalar
     assert isinstance(m.dtype, pm.MoneyDtype)
     assert m.iloc[0] == (money_list[0] / decimal_scalar).round(pm.money_decimals)
@@ -248,7 +248,7 @@ def test_truediv_money_array_decimal(money_list, decimal_scalar):
 
 
 def test_truediv_money_array_float_array(money_list, float_list):
-    m1 = pd.Series(money_list, dtype="money64")
+    m1 = pd.Series(money_list, dtype="Money64")
     m2 = pd.Series(reversed(float_list))
     m = m1 / m2
     assert isinstance(m.dtype, pm.MoneyDtype)
@@ -263,7 +263,7 @@ def test_truediv_money_array_float_array(money_list, float_list):
 
 
 def test_truediv_money_array_float(money_list, float_scalar):
-    m1 = pd.Series(money_list, dtype="money64")
+    m1 = pd.Series(money_list, dtype="Money64")
     m = m1 / float_scalar
     assert isinstance(m.dtype, pm.MoneyDtype)
     # DeprecationWarning: Multiplying Money instances with floats is deprecated
@@ -274,13 +274,13 @@ def test_truediv_money_array_float(money_list, float_scalar):
 
 def test_badscalar():
     with pytest.raises(InvalidOperation):
-        pd.Series("asdf", dtype="money64")
+        pd.Series("asdf", dtype="Money64")
 
 
 def test_astype(money_list):
-    m1 = pd.Series(money_list, dtype="money64")
-    m = m1.astype(np.float64)
-    assert np.issubdtype(m.dtype, np.floating)
+    m1 = pd.Series(money_list, dtype="Money64")
+    m = m1.astype("Float64")
+    assert isinstance(m.dtype, pd.Float64Dtype)
     assert round(m.iloc[0], pm.money_decimals) == round(
         float(money_list[0].amount),
         pm.money_decimals,
@@ -292,21 +292,21 @@ def test_astype(money_list):
 
 
 def test_eq(money_list):
-    m1 = pd.Series(money_list, dtype="money64")
-    m2 = pd.Series(reversed(money_list), dtype="money64")
+    m1 = pd.Series(money_list, dtype="Money64")
+    m2 = pd.Series(reversed(money_list), dtype="Money64")
     assert list(m1 == m1) == [True, True]
-    assert list(m1 == pd.Series(money_list, dtype="money64")) == [True, True]
+    assert list(m1 == pd.Series(money_list, dtype="Money64")) == [True, True]
     assert list(m1 != m2) == [True, True]
 
 
 def test_eq_not_money(money_list):
-    m = pd.Series(money_list, dtype="money64")
+    m = pd.Series(money_list, dtype="Money64")
     assert list(m == money_list) == [True, True]
 
 
 def test_bad_money_type():
     with pytest.raises(TypeError):
-        pd.Series(object(), dtype="money64")
+        pd.Series(object(), dtype="Money64")
 
 
 def test_slice_head(slice_series):
@@ -343,6 +343,82 @@ def test_slice_index(slice_series):
 
 def test_from_strings():
     strings = "3.14 2.72".split()
-    m = pd.Series(strings, dtype="money64")
+    m = pd.Series(strings, dtype="Money64")
     assert m.iloc[0] == Money(strings[0], USD)
     assert m.iloc[1] == Money(strings[1], USD)
+
+
+def test_nan():
+    m = pd.Series(np.nan, dtype="Money64")
+    assert pd.isna(m.iloc[0])
+
+
+def test_reindex(money_list):
+    m = pd.Series(money_list, dtype="Money64").reindex(range(len(money_list) + 1))
+    assert not any(map(pd.isna, m.iloc[:-1]))
+    assert pd.isna(m.iloc[-1])
+
+
+def test_isna(money_list):
+    m = pd.Series(money_list, dtype="Money64").reindex(range(len(money_list) + 1))
+    nas = m.isna()
+    assert not any(nas.iloc[:-1])
+    assert nas.iloc[-1]
+
+
+def test_na_astype(money_list):
+    m = (
+        pd.Series(money_list, dtype="Money64")
+        .reindex(range(len(money_list) + 1))
+        .astype("Float64")
+    )
+    nas = m.isna()
+    assert not any(nas.iloc[:-1])
+    assert nas.iloc[-1]
+
+
+def test_na_arithmetic(money_list):
+    m1 = pd.Series(money_list, dtype="Money64").reindex(range(len(money_list) + 1))
+    m2 = m1.iloc[::-1].reset_index(drop=True)
+    for oper, func in [
+        ("+", lambda x, y: x + y),
+        ("-", lambda x, y: x - y),
+        ("*", lambda x, y: x * y),
+        ("/", lambda x, y: x / y),
+    ]:
+        if oper == "*":
+            # builtins.TypeError: Cannot multiply money by money <MoneyArray>
+            nas = func(m1, m2.astype("Float64")).isna()
+        else:
+            nas = func(m1, m2).isna()
+        assert nas.iloc[0]
+        assert nas.iloc[-1]
+        assert not any(nas.iloc[1:-1])
+
+
+def test_copy(money_list):
+    m1 = pd.Series(money_list, dtype="Money64")
+    m2 = m1.copy()
+    assert all(m1 == m2)
+
+
+def test_concat(money_list):
+    m1 = pd.Series(money_list, dtype="Money64")
+    m2 = m1.copy()
+
+    m = pd.concat([m1, m2])
+    for item, expect in zip(m, money_list + money_list):
+        assert item == expect
+
+
+def test_print_with_na(money_list):
+    import contextlib
+    import io
+
+    f = io.StringIO()
+    m = pd.Series(money_list, dtype="Money64").reindex(range(len(money_list) + 1))
+
+    with contextlib.redirect_stdout(f):
+        print(m)
+
+    assert f.getvalue() == "0    $3.14\n1    $2.72\n2     <NA>\ndtype: Money64\n"

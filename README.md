@@ -14,11 +14,13 @@ pipenv install pandas-money
 
 ### Example
 ```py
-import pandas as pd
-import pandas_money as pm
 from decimal import Decimal
 
-s = pd.Series(["1.11", "2.22", "3.33"], dtype="money64")
+import pandas as pd
+
+import pandas_money as pm
+
+s = pd.Series(["1.11", "2.22", "3.33"], dtype="Money64")
 
 print(s)
 print(s + s)
@@ -31,19 +33,19 @@ outputs
 0    $1.11
 1    $2.22
 2    $3.33
-dtype: money64
+dtype: Money64
 0    $2.22
 1    $4.44
 2    $6.66
-dtype: money64
+dtype: Money64
 0    $1.66
 1    $3.33
 2    $5.00
-dtype: money64
+dtype: Money64
 0    $0.56
 1    $1.11
 2    $1.66
-dtype: money64
+dtype: Money64
 $1.11 <class 'moneyed.classes.Money'>
 ```
 

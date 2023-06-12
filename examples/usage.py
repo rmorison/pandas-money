@@ -4,7 +4,7 @@ import pandas as pd
 
 import pandas_money as pm
 
-s = pd.Series(["1.11", "2.22", "3.33"], dtype="money64")
+s = pd.Series(["1.11", "2.22", "3.33"], dtype="Money64")
 
 print(s)
 print(s + s)
