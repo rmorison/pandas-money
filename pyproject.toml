@@ -10,7 +10,6 @@ packages = [{include = "pandas_money"}]
 [tool.poetry.dependencies]
 python = "^3.11"
 pandas = "^2.0.2"
-pyarrow = "^12.0.0"
 pandas-stubs = "^2.0.2.230605"
 py-moneyed = "^3.0"
 
@@ -29,15 +28,17 @@ flake8 = "^6.0.0"
 pre-commit = "^3.3.2"
 pytest = "^7.3.1"
 pytest-cov = "^4.1.0"
+rich = "^13.4.1"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
-testpaths = ["pandas_money"]
+testpaths = ["pandas_money/tests"]
 
 [tool.mypy]
+exclude = ["tests"]
 warn_redundant_casts = true
 warn_unused_ignores = true
 disallow_any_generics = false
@@ -57,4 +58,4 @@ select = ["C","E","F","W","B","B950"]
 extend-ignore = ["E203", "E501", "W503"]
 
 [tool.coverage.run]
-omit =["*/tests/*", "tests.py"]
+omit = ["__init__.py", "test_*.py"]

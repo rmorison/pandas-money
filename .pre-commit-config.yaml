@@ -78,7 +78,7 @@ repos:
     rev: "v1.3.0"
     hooks:
       - id: mypy
-        exclude: tests/data/
+        exclude: "tests"
         args: [--config-file=pyproject.toml]
         additional_dependencies:
           - "py-moneyed"
