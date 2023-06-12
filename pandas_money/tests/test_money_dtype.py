@@ -1,3 +1,6 @@
+import contextlib
+import io
+import re
 import string
 from decimal import Decimal, InvalidOperation
 
@@ -412,13 +415,15 @@ def test_concat(money_list):
 
 
 def test_print_with_na(money_list):
-    import contextlib
-    import io
-
     f = io.StringIO()
     m = pd.Series(money_list, dtype="Money64").reindex(range(len(money_list) + 1))
 
     with contextlib.redirect_stdout(f):
         print(m)
 
-    assert f.getvalue() == "0    $3.14\n1    $2.72\n2     <NA>\ndtype: Money64\n"
+    lines = f.getvalue().splitlines()
+    # adjust for slightly different formatting in GH Actions container
+    assert re.match(r"\d\s+\$\s*3.14\s*", lines[0])
+    assert re.match(r"\d\s+\$\s*2.72\s*", lines[1])
+    assert re.match(r"\d\s+\<NA\>\s*", lines[2])
+    assert "dtype: Money64" in lines[3]
