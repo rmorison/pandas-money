@@ -24,6 +24,7 @@ print(s)
 print(s + s)
 print(s * Decimal("1.5"))
 print(s / 2)
+print(s.iloc[0], type(s.iloc[0]))
 ```
 outputs
 ```
