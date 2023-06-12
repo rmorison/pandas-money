@@ -38,7 +38,7 @@ build-backend = "poetry.core.masonry.api"
 testpaths = ["pandas_money/tests"]
 
 [tool.mypy]
-exclude = ["tests"]
+exclude = ["tests", "examples"]
 warn_redundant_casts = true
 warn_unused_ignores = true
 disallow_any_generics = false
