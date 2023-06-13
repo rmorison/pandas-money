@@ -62,7 +62,7 @@ class MoneyArray(ExtensionScalarOpsMixin, ExtensionArray):
     def _clean_value(
         self, v: InputScalar | NAType, to_cents: bool
     ) -> int | Decimal | NAType:
-        if pd.isna(v):
+        if pd.isna(v) or v == np.inf:
             return pd.NA
 
         factor = money_factor if to_cents else 1
@@ -252,3 +252,7 @@ MoneyArray._add_arithmetic_ops()
 MoneyArray._add_comparison_ops()
 for attr, patch in ops_overrides_patches.items():
     setattr(MoneyArray, attr, patch)
+
+
+def money_series(data, **kwargs) -> pd.Series:
+    return pd.Series(data, dtype=MoneyDtype(), **kwargs)

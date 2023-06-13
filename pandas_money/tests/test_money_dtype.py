@@ -88,6 +88,14 @@ def test_money_scalar(money_scalar):
     assert m.iloc[0] == money_scalar
 
 
+def test_money_series_in_dataframe(money_scalar):
+    df = pd.DataFrame(index=range(2))
+    df["m"] = pm.money_series(money_scalar)
+    assert isinstance(df["m"].dtype, pm.MoneyDtype)
+    assert df["m"].iloc[0] == money_scalar
+    assert pd.isna(df["m"].iloc[1])
+
+
 def test_decimal_scalar(decimal_scalar):
     m = pd.Series(decimal_scalar, dtype="Money64")
     assert isinstance(m.dtype, pm.MoneyDtype)
@@ -273,6 +281,13 @@ def test_truediv_money_array_float(money_list, float_scalar):
     # so cast floats to Decimal
     assert m.iloc[0] == (money_list[0] / Decimal(float_scalar)).round(pm.money_decimals)
     assert m.iloc[1] == (money_list[1] / Decimal(float_scalar)).round(pm.money_decimals)
+
+
+def test_truediv_by_zero(money_list):
+    m1 = pm.money_series(money_list)
+    m = m1 / [0, 1]
+    assert pd.isna(m.iloc[0])
+    assert m.iloc[1] == money_list[1]
 
 
 def test_badscalar():
