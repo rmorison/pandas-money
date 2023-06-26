@@ -15,6 +15,7 @@ from pandas.api.extensions import (
 from pandas.core.dtypes.base import ExtensionDtype
 from pandas.core.dtypes.common import is_dtype_equal, pandas_dtype
 from pandas.core.dtypes.dtypes import PandasExtensionDtype
+from pandas.core.dtypes.inference import is_integer
 
 money_decimals = 2
 money_factor = 10**money_decimals
@@ -100,6 +101,15 @@ class MoneyArray(ExtensionScalarOpsMixin, ExtensionArray):
             return Money(val, USD) / money_factor
         else:
             return MoneyArray(self.values[item], to_cents=False)
+
+    def __setitem__(self, key, value) -> None:
+        """Set one or more values inplace."""
+        try:
+            value = self._clean_value(value, to_cents=True)
+        except TypeError:
+            pass
+        value = value if pd.isna(value) else np.int64(value)
+        self.values.__setitem__(key, value)
 
     def __eq__(self, other):
         if isinstance(other, (pd.Index, pd.Series, pd.DataFrame)):
