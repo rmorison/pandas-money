@@ -15,7 +15,6 @@ from pandas.api.extensions import (
 from pandas.core.dtypes.base import ExtensionDtype
 from pandas.core.dtypes.common import is_dtype_equal, pandas_dtype
 from pandas.core.dtypes.dtypes import PandasExtensionDtype
-from pandas.core.dtypes.inference import is_integer
 
 money_decimals = 2
 money_factor = 10**money_decimals
@@ -41,6 +40,14 @@ class MoneyDtype(PandasExtensionDtype):
         # for python>=3.10, different nan objects have different hashes
         # we need to avoid that and thus use hash function with old behavior
         return object_hash(tuple(getattr(self, attr) for attr in self._metadata))
+
+
+def MoneySeries(
+    data=None, index=None, dtype: Dtype | None = None, **kwargs
+) -> pd.Series:
+    assert dtype is None, "Set dtype in MoneySeries not allowed"
+    dtype = MoneyDtype()
+    return pd.Series(data, index, dtype, **kwargs)
 
 
 class MoneyArray(ExtensionScalarOpsMixin, ExtensionArray):
@@ -262,7 +269,3 @@ MoneyArray._add_arithmetic_ops()
 MoneyArray._add_comparison_ops()
 for attr, patch in ops_overrides_patches.items():
     setattr(MoneyArray, attr, patch)
-
-
-def money_series(data, **kwargs) -> pd.Series:
-    return pd.Series(data, dtype=MoneyDtype(), **kwargs)

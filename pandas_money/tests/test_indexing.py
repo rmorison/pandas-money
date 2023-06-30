@@ -23,7 +23,7 @@ def money_multidict(multi_tuples):
 
 @pytest.fixture
 def money_series(money_dict):
-    return pm.money_series(money_dict)
+    return pd.Series(money_dict, dtype="Money64")
 
 
 def test_loc(money_dict, money_series):
@@ -62,10 +62,3 @@ def test_set_iloc(money_dict):
         s.iloc[i] = money_dict[idx]
     for i, idx in enumerate(index):
         assert s.iloc[i] == money_dict[idx]
-
-
-@pytest.mark.skip(reason="not supported yet")
-def test_no_data_isha(money_dict):
-    index = list(money_dict.keys())
-    s = pm.series(index=index)
-    assert all(list(pd.isna(s)))
