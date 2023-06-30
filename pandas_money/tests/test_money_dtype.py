@@ -90,7 +90,7 @@ def test_money_scalar(money_scalar):
 
 def test_money_series_in_dataframe(money_scalar):
     df = pd.DataFrame(index=range(2))
-    df["m"] = pm.money_series(money_scalar)
+    df["m"] = pd.Series(money_scalar, dtype="Money64")
     assert isinstance(df["m"].dtype, pm.MoneyDtype)
     assert df["m"].iloc[0] == money_scalar
     assert pd.isna(df["m"].iloc[1])
@@ -284,7 +284,7 @@ def test_truediv_money_array_float(money_list, float_scalar):
 
 
 def test_truediv_by_zero(money_list):
-    m1 = pm.money_series(money_list)
+    m1 = pd.Series(money_list, dtype="Money64")
     m = m1 / [0, 1]
     assert pd.isna(m.iloc[0])
     assert m.iloc[1] == money_list[1]
@@ -442,3 +442,20 @@ def test_print_with_na(money_list):
     assert re.match(r"\d\s+\$\s*2.72\s*", lines[1])
     assert re.match(r"\d\s+\<NA\>\s*", lines[2])
     assert "dtype: Money64" in lines[3]
+
+
+def test_no_data_isha(money_dict):
+    index = list(money_dict.keys())
+    s = pd.Series(index=index, dtype="Money64")
+    assert all(list(pd.isna(s)))
+
+
+def test_money_series(money_dict):
+    m1 = pd.Series(money_dict, dtype="Money64")
+    m2 = pm.MoneySeries(money_dict)
+    assert all(m1 == m2)
+
+
+def test_dtype_not_allowed():
+    with pytest.raises(AssertionError):
+        pm.MoneySeries(dtype=int)
